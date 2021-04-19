@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:ft_hangout/localization/locale_constant.dart';
 import 'package:ft_hangout/localization/localizations_delegate.dart';
-import 'ui/HomePage.dart';
+import 'package:ft_hangout/src/helpers/DatabaseHelper.dart';
+import 'ui/home_page.dart';
 
-class App extends StatelessWidget {
-  final Locale _locale = Locale('en', '');
+class App extends StatefulWidget {
+  static void setLocale(BuildContext context, Locale newLocale) {
+    var state = context.findAncestorStateOfType<_AppState>();
+    state.setLocale(newLocale);
+  }
+
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  Locale _locale = Locale('en', '');
+
+  @override
+  void initState() {
+    super.initState();
+    DatabaseHelper.instance.getContacts();
+    getLocale();
+  }
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

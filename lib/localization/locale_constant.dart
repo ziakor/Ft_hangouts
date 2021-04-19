@@ -1,19 +1,21 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:ft_hangout/src/app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../src/app.dart';
-
-const String prefSelectedLanguageCode = "en";
+const String prefSelectedLanguageCode = "selectedLanguage";
 
 Future<Locale> setLocale(String languageCode) async {
-  //set local to bdd user table
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  await _prefs.setString(prefSelectedLanguageCode, languageCode);
   return _locale(languageCode);
 }
 
 Future<Locale> getLocale() async {
-  //get local from bdd user table or set to 'en'
-  return _locale('e');
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  String languageCode = _prefs.getString(prefSelectedLanguageCode) ?? "en";
+  return _locale(languageCode);
 }
 
 Locale _locale(String languageCode) {
@@ -23,7 +25,7 @@ Locale _locale(String languageCode) {
 }
 
 void changeLanguage(BuildContext context, String selectedLanguageCode) async {
-  // var _locale = await setLocale(selectedLanguageCode);
-  // App.setLocale(context, _locale);
+  var _locale = await setLocale(selectedLanguageCode);
+  App.setLocale(context, _locale);
   // change locale to the app
 }
