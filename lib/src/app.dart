@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:ft_hangout/localization/locale_constant.dart';
-import 'package:ft_hangout/localization/localizations_delegate.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/helpers/DatabaseHelper.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';

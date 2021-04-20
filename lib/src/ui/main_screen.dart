@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/localization/locale_constant.dart';
+import 'package:ft_hangout/src/app.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -88,7 +89,7 @@ class HomePage extends StatelessWidget {
       body: Column(children: [
         TextButton(
             onPressed: () =>
-                BlocProvider.of<LanguageBloc>(context).changeLanguage("fr"),
+                BlocProvider.of<LanguageBloc>(context).changeLanguage("en"),
             child: Text(Languages.of(context).appName))
       ]),
     );
