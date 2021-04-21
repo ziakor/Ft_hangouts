@@ -6,4 +6,5 @@ abstract class Languages {
   }
 
   String get appName;
+  String get settings;
 }

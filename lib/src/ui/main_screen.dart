@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
-import 'package:ft_hangout/localization/locale_constant.dart';
-import 'package:ft_hangout/src/app.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:ft_hangout/localization/localizations_delegate.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -13,84 +9,47 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Locale _locale;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    init();
+  void _actionNavbar() {
+    print("CA CLICK SUR LICON NAVBAR");
   }
-
-  Future<Locale> init() async {
-    _locale = await getLocale();
-    return _locale;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: BlocProvider.of<LanguageBloc>(context).localeStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.data != null) _locale = snapshot.data;
-        if (snapshot.data == null) {
-          BlocProvider.of<LanguageBloc>(context).initLanguage();
-          return (Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-            ),
-          ));
-        }
-        return Container(
-          child: MaterialApp(
-              locale: _locale,
-              supportedLocales: [
-                const Locale('en', ''),
-                const Locale('fr', ''),
-              ],
-              localizationsDelegates: [
-                AppLocalizationsDelegate(),
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              localeResolutionCallback: (locale, supportedLocales) {
-                for (var supportedLocale in supportedLocales) {
-                  if (supportedLocale?.languageCode == locale?.languageCode &&
-                      supportedLocale?.countryCode == locale?.countryCode)
-                    return supportedLocale;
-                }
-                return supportedLocales?.first;
-              },
-              theme: ThemeData(
-                primarySwatch: Colors.red,
-              ),
-              title: 'Flutter Demo',
-              home: HomePage()),
-        );
-      },
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // The [AppBar] title text should update its message
-        // according to the system locale of the target platform.
-        // Switching between English and Spanish locales should
-        // cause this text to update.
-        title: Text("Title Text"),
+        title: Text("Ft_hangouts"),
+        actions: [
+          PopupMenuButton(
+              offset: Offset(0, -15),
+              color: Colors.grey.shade900,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.more_vert),
+              ),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: Column(
+                      children: [
+                        Text(
+                          Languages.of(context).settings,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        )
+                      ],
+                    ),
+                  )
+                ];
+              })
+        ],
       ),
       body: Column(children: [
         TextButton(
             onPressed: () =>
                 BlocProvider.of<LanguageBloc>(context).changeLanguage("en"),
-            child: Text(Languages.of(context).appName))
+            child: Text(
+              Languages.of(context).appName,
+              style: Theme.of(context).textTheme.bodyText1,
+            ))
       ]),
     );
   }
