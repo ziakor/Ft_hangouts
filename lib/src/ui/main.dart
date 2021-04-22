@@ -50,7 +50,7 @@ class _MainState extends State<Main> {
               },
               theme: ThemeData(
                 primarySwatch: Colors.red,
-                scaffoldBackgroundColor: Colors.black,
+                scaffoldBackgroundColor: Colors.grey.shade200,
                 textTheme: TextTheme(bodyText1: TextStyle(color: Colors.white)),
               ),
               title: 'Flutter Demo',

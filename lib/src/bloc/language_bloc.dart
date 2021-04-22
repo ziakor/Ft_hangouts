@@ -5,8 +5,8 @@ import 'package:ft_hangout/localization/locale_constant.dart';
 import 'package:ft_hangout/src/bloc/bloc.dart';
 
 class LanguageBloc implements Bloc {
-  Locale get selectedLocale => _locale;
   Locale _locale;
+  Locale get selectedLocale => _locale;
 
   final _languageController = StreamController<Locale>();
   StreamSink<Locale> get localeSink => _languageController.sink;

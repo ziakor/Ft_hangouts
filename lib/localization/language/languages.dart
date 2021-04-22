@@ -6,5 +6,11 @@ abstract class Languages {
   }
 
   String get appName;
+  String get cancel;
   String get settings;
+  String get settingsTheme;
+  String get settingsHeaderColor;
+  String get settingsLanguage;
+  String get settingsLanguageTitle;
+  List<String> get languageList;
 }

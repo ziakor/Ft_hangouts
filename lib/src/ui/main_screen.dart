@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
+import 'package:ft_hangout/src/scale_route.dart';
+import 'package:ft_hangout/src/ui/settings.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -9,8 +11,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  void _actionNavbar() {
-    print("CA CLICK SUR LICON NAVBAR");
+  void _onSelectedPopupMenu(BuildContext context, int value) {
+    switch (value) {
+      case 0:
+        Navigator.push(context, ScaleRoute(page: Settings()));
+        break;
+      default:
+    }
   }
 
   @override
@@ -20,6 +27,9 @@ class _MainScreenState extends State<MainScreen> {
         title: Text("Ft_hangouts"),
         actions: [
           PopupMenuButton(
+              onSelected: (value) {
+                _onSelectedPopupMenu(context, value);
+              },
               offset: Offset(0, -15),
               color: Colors.grey.shade900,
               child: Padding(
@@ -29,6 +39,7 @@ class _MainScreenState extends State<MainScreen> {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
+                    value: 0,
                     child: Column(
                       children: [
                         Text(
