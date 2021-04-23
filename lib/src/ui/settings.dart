@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
+import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
 
 class Settings extends StatefulWidget {
@@ -11,7 +12,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  Color headerColor;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +31,11 @@ class _SettingsState extends State<Settings> {
                   ListTile(
                     leading: Icon(
                       Icons.color_lens,
-                      color: Colors.red,
+                      color: Theme.of(context).primaryColor,
                     ),
                     title: Text(Languages.of(context).settingsTheme),
                     onTap: () {
-                      //Open edit Language
+                      showDialog(context: context, builder: _buildThemeDialog);
                     },
                     trailing: Icon(Icons.keyboard_arrow_right),
                   ),
@@ -47,11 +47,11 @@ class _SettingsState extends State<Settings> {
                   ListTile(
                     leading: Icon(
                       Icons.colorize,
-                      color: Colors.red,
+                      color: Theme.of(context).primaryColor,
                     ),
                     title: Text(Languages.of(context).settingsHeaderColor),
                     onTap: () {
-                      //Open edit Color
+                      showDialog(context: context, builder: _buildHeaderDialog);
                     },
                     trailing: Icon(Icons.keyboard_arrow_right),
                   ),
@@ -63,7 +63,7 @@ class _SettingsState extends State<Settings> {
                   ListTile(
                     leading: Icon(
                       Icons.language,
-                      color: Colors.red,
+                      color: Theme.of(context).primaryColor,
                     ),
                     title: Text(Languages.of(context).settingsLanguage),
                     onTap: () {
@@ -82,22 +82,171 @@ class _SettingsState extends State<Settings> {
   }
 }
 
+Widget _buildHeaderDialog(BuildContext context) {
+  Color _currentColor =
+      BlocProvider.of<HeaderColorBloc>(context).selectedHeaderColor;
+  final List<List<Color>> listColor = [
+    [
+      Colors.red,
+      Colors.pink,
+      Colors.purple,
+      Colors.indigo,
+    ],
+    [
+      Colors.blue,
+      Colors.lightBlue,
+      Colors.cyan,
+      Colors.teal,
+    ],
+    [
+      Colors.green,
+      Colors.lightGreen,
+      Colors.lime,
+      Colors.yellow,
+    ],
+    [
+      Colors.amber,
+      Colors.orange,
+      Colors.deepOrange,
+      Colors.grey,
+    ]
+  ];
+
+  void _changeColor(BuildContext context, Color newColor) {
+    _currentColor = newColor;
+    BlocProvider.of<HeaderColorBloc>(context).changeHeaderColor(newColor);
+  }
+
+  return StatefulBuilder(builder: (context, setState2) {
+    return AlertDialog(
+      title: Text(Languages.of(context).settingsHeaderColorTitle),
+      buttonPadding: EdgeInsets.symmetric(vertical: 0.0),
+      actionsPadding: EdgeInsets.only(right: 9),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context, null);
+            },
+            child: Text(Languages.of(context).close))
+      ],
+      content: Container(
+        width: double.minPositive,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: listColor.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              padding: index + 1 < listColor.length
+                  ? EdgeInsets.only(bottom: 10.0)
+                  : null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ClipOval(
+                    child: Material(
+                      color: listColor[index][0], // button color
+                      child: InkWell(
+                        splashColor: Colors.black45, // inkwell color
+                        child: SizedBox(
+                            width: 45,
+                            height: 45,
+                            child: _currentColor == listColor[index][0]
+                                ? Icon(Icons.check)
+                                : null),
+                        onTap: () {
+                          setState2(() {
+                            _currentColor = listColor[index][0];
+                          });
+                          _changeColor(context, listColor[index][0]);
+                        },
+                      ),
+                    ),
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: listColor[index][1], // button color
+                      child: InkWell(
+                        splashColor: Colors.black45, // inkwell color
+                        child: SizedBox(
+                            width: 45,
+                            height: 45,
+                            child: _currentColor == listColor[index][1]
+                                ? Icon(Icons.check)
+                                : null),
+                        onTap: () {
+                          setState2(() {
+                            _currentColor = listColor[index][0];
+                          });
+                          _changeColor(context, listColor[index][1]);
+                        },
+                      ),
+                    ),
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: listColor[index][2], // button color
+                      child: InkWell(
+                        splashColor: Colors.black45, // inkwell color
+                        child: SizedBox(
+                            width: 45,
+                            height: 45,
+                            child: _currentColor == listColor[index][2]
+                                ? Icon(Icons.check)
+                                : null),
+                        onTap: () {
+                          setState2(() {
+                            _currentColor = listColor[index][0];
+                          });
+                          _changeColor(context, listColor[index][2]);
+                        },
+                      ),
+                    ),
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: listColor[index][3], // button color
+                      child: InkWell(
+                        splashColor: Colors.black45, // inkwell color
+                        child: SizedBox(
+                            width: 45,
+                            height: 45,
+                            child: _currentColor == listColor[index][3]
+                                ? Icon(Icons.check)
+                                : null),
+                        onTap: () {
+                          setState2(() {
+                            _currentColor = listColor[index][0];
+                          });
+                          _changeColor(context, listColor[index][3]);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  });
+}
+
 Widget _buildLanguageDialog(BuildContext context) {
   // convert en stfull
   List<Map<String, String>> _languageList = [
     {"title": Languages.of(context).languageList[0], "languageCode": "en"},
     {"title": Languages.of(context).languageList[1], "languageCode": "fr"}
   ];
+  print(BlocProvider.of<LanguageBloc>(context).selectedLocale);
   int _currentIndex = (_languageList.indexWhere((element) =>
-          element["languageCode"] ==
-          BlocProvider.of<LanguageBloc>(context).selectedLocale.toString())) |
-      0;
-  print("$_currentIndex << current");
+      element["languageCode"] ==
+      BlocProvider.of<LanguageBloc>(context).selectedLocale.toString()));
+
   void _changeLanguage(BuildContext context, String newLanguage) {
     BlocProvider.of<LanguageBloc>(context).changeLanguage(newLanguage);
   }
 
-  final int savedIndex = _currentIndex;
   return StatefulBuilder(
     builder: (
       context,
@@ -111,12 +260,69 @@ Widget _buildLanguageDialog(BuildContext context) {
         actions: <Widget>[
           TextButton(
               onPressed: () {
-                if (savedIndex != _currentIndex) print("SDNJOKSDNKLSDNK");
                 Navigator.pop(context, null);
               },
-              child: Text(Languages.of(context).cancel))
+              child: Text(Languages.of(context).close))
         ],
-        //! A DEBUG
+        content: Container(
+          width: double.minPositive,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: _languageList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return RadioListTile(
+                value: index,
+                dense: true,
+                activeColor: Colors.black,
+                groupValue: _currentIndex,
+                title: Text(_languageList[index]["title"]),
+                onChanged: (val) {
+                  setState2(() {
+                    _currentIndex = val;
+                  });
+                  _changeLanguage(context, _languageList[val]["languageCode"]);
+                },
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildThemeDialog(BuildContext context) {
+  // convert en stfull
+  List<Map<String, String>> _languageList = [
+    {"title": Languages.of(context).languageList[0], "languageCode": "en"},
+    {"title": Languages.of(context).languageList[1], "languageCode": "fr"}
+  ];
+  print(BlocProvider.of<LanguageBloc>(context).selectedLocale);
+  int _currentIndex = (_languageList.indexWhere((element) =>
+      element["languageCode"] ==
+      BlocProvider.of<LanguageBloc>(context).selectedLocale.toString()));
+
+  void _changeLanguage(BuildContext context, String newLanguage) {
+    BlocProvider.of<LanguageBloc>(context).changeLanguage(newLanguage);
+  }
+
+  return StatefulBuilder(
+    builder: (
+      context,
+      setState2,
+    ) {
+      return AlertDialog(
+        title: Text(Languages.of(context).settingsLanguageTitle),
+        contentPadding: EdgeInsets.zero,
+        buttonPadding: EdgeInsets.symmetric(vertical: 0.0),
+        actionsPadding: EdgeInsets.only(right: 9),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context, null);
+              },
+              child: Text(Languages.of(context).close))
+        ],
         content: Container(
           width: double.minPositive,
           child: ListView.builder(

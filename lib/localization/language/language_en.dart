@@ -7,7 +7,8 @@ class LanguageEn extends Languages {
   String get settingsTheme => "Change theme";
   String get settingsHeaderColor => "Change header color";
   String get settingsLanguage => "Change language";
-  String get cancel => "Cancel";
+  String get close => "Close";
   List<String> get languageList => ["English", "French"];
   String get settingsLanguageTitle => "Language";
+  String get settingsHeaderColorTitle => "Header's color";
 }

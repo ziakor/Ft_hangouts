@@ -6,16 +6,12 @@ import 'package:ft_hangout/src/bloc/bloc.dart';
 
 class LanguageBloc implements Bloc {
   Locale _locale;
-  Locale get selectedLocale => _locale;
-
   final _languageController = StreamController<Locale>();
+
+  Locale get selectedLocale => _locale;
   StreamSink<Locale> get localeSink => _languageController.sink;
 
   Stream<Locale> get localeStream => _languageController.stream;
-
-  // LanguageBloc() {
-  //   _localeController.stream.listen(changeLanguage);
-  // }
 
   void changeLanguage(String languageCode) {
     setLocale(languageCode);
@@ -25,6 +21,7 @@ class LanguageBloc implements Bloc {
 
   void initLanguage() async {
     _locale = await getLocale();
+    print("_locale: $_locale");
     localeSink.add(_locale);
   }
 
