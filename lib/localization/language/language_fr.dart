@@ -11,4 +11,7 @@ class LanguageFr extends Languages {
   List<String> get languageList => ["Anglais", "Français"];
   String get settingsLanguageTitle => "Langue";
   String get settingsHeaderColorTitle => "couleur de l'entête";
+  String get settingsThemeTitle => "Thème";
+  String get themeLight => "Clair";
+  String get themeDark => "Sombre";
 }

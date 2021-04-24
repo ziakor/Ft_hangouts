@@ -14,4 +14,7 @@ abstract class Languages {
   String get settingsLanguageTitle;
   List<String> get languageList;
   String get settingsHeaderColorTitle;
+  String get settingsThemeTitle;
+  String get themeLight;
+  String get themeDark;
 }

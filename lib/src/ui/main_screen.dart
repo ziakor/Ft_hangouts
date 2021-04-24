@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
-import 'package:ft_hangout/src/scale_route.dart';
+import 'package:ft_hangout/src/ui/components/scale_route.dart';
 import 'package:ft_hangout/src/ui/settings.dart';
 
 class MainScreen extends StatefulWidget {
@@ -31,7 +31,6 @@ class _MainScreenState extends State<MainScreen> {
                 _onSelectedPopupMenu(context, value);
               },
               offset: Offset(0, -15),
-              color: Colors.grey.shade900,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(Icons.more_vert),
@@ -44,7 +43,6 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         Text(
                           Languages.of(context).settings,
-                          style: Theme.of(context).textTheme.bodyText1,
                         )
                       ],
                     ),

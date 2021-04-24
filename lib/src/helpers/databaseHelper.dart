@@ -14,7 +14,6 @@ class DatabaseHelper {
 
   static Database _database;
   Future<Database> get database async {
-    print("SALSIFI");
     if (_database != null) return _database;
     _database = await _initDatabase();
     return _database;
@@ -66,7 +65,6 @@ class DatabaseHelper {
         contact.notes,
       ],
     ).then((value) {
-      print(value);
       return value;
     }).catchError((value) {
       print("error insert : $value");
@@ -90,7 +88,6 @@ class DatabaseHelper {
         contact.id,
       ],
     ).then((value) {
-      print(value);
       return value;
     }).catchError((value) {
       print("error update : $value");
@@ -103,7 +100,6 @@ class DatabaseHelper {
 
     return db.rawDelete("DELETE FROM Contact WHERE id = ?", [contactId]).then(
         (value) {
-      print(value);
       return value;
     }).catchError((value) {
       print("error delete : $value");
@@ -117,7 +113,6 @@ class DatabaseHelper {
     try {
       var res = await db
           .rawQuery("SELECT id, firstName, lastName, phone FROM Contact");
-      print(res);
       return res;
     } catch (e) {
       print("error delete : $e");
@@ -134,7 +129,6 @@ class DatabaseHelper {
       "INSERT INTO Message(message,time,idContact) VALUES(?, ?, ?)",
       [message.message, message.time, message.idContact],
     ).then((value) {
-      print(value);
       return value;
     }).catchError((value) {
       print("error delete : $value");

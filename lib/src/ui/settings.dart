@@ -3,6 +3,7 @@ import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
+import 'package:ft_hangout/src/bloc/theme_bloc.dart';
 
 class Settings extends StatefulWidget {
   Settings({Key key}) : super(key: key);
@@ -238,10 +239,12 @@ Widget _buildLanguageDialog(BuildContext context) {
     {"title": Languages.of(context).languageList[0], "languageCode": "en"},
     {"title": Languages.of(context).languageList[1], "languageCode": "fr"}
   ];
-  print(BlocProvider.of<LanguageBloc>(context).selectedLocale);
-  int _currentIndex = (_languageList.indexWhere((element) =>
-      element["languageCode"] ==
-      BlocProvider.of<LanguageBloc>(context).selectedLocale.toString()));
+  int _currentIndex =
+      BlocProvider.of<LanguageBloc>(context).selectedLocale != null
+          ? _languageList.indexWhere((element) =>
+              element["languageCode"] ==
+              BlocProvider.of<LanguageBloc>(context).selectedLocale.toString())
+          : 0;
 
   void _changeLanguage(BuildContext context, String newLanguage) {
     BlocProvider.of<LanguageBloc>(context).changeLanguage(newLanguage);
@@ -293,17 +296,14 @@ Widget _buildLanguageDialog(BuildContext context) {
 
 Widget _buildThemeDialog(BuildContext context) {
   // convert en stfull
-  List<Map<String, String>> _languageList = [
-    {"title": Languages.of(context).languageList[0], "languageCode": "en"},
-    {"title": Languages.of(context).languageList[1], "languageCode": "fr"}
+  List<String> themeList = [
+    Languages.of(context).themeLight,
+    Languages.of(context).themeDark,
   ];
-  print(BlocProvider.of<LanguageBloc>(context).selectedLocale);
-  int _currentIndex = (_languageList.indexWhere((element) =>
-      element["languageCode"] ==
-      BlocProvider.of<LanguageBloc>(context).selectedLocale.toString()));
+  int _currentIndex = BlocProvider.of<ThemeBloc>(context).darktheme ? 1 : 0;
 
-  void _changeLanguage(BuildContext context, String newLanguage) {
-    BlocProvider.of<LanguageBloc>(context).changeLanguage(newLanguage);
+  void _changeTheme(BuildContext context, int index) {
+    BlocProvider.of<ThemeBloc>(context).changeTheme(index == 0 ? false : true);
   }
 
   return StatefulBuilder(
@@ -327,19 +327,19 @@ Widget _buildThemeDialog(BuildContext context) {
           width: double.minPositive,
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: _languageList.length,
+            itemCount: themeList.length,
             itemBuilder: (BuildContext context, int index) {
               return RadioListTile(
                 value: index,
                 dense: true,
                 activeColor: Colors.black,
                 groupValue: _currentIndex,
-                title: Text(_languageList[index]["title"]),
+                title: Text(themeList[index]),
                 onChanged: (val) {
                   setState2(() {
                     _currentIndex = val;
                   });
-                  _changeLanguage(context, _languageList[val]["languageCode"]);
+                  _changeTheme(context, val);
                 },
               );
             },
