@@ -14,4 +14,5 @@ class LanguageEn extends Languages {
   String get settingsThemeTitle => "Theme";
   String get themeLight => "Light";
   String get themeDark => "Dark";
+  String get floatingNewContact => "New contact";
 }

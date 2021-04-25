@@ -17,4 +17,5 @@ abstract class Languages {
   String get settingsThemeTitle;
   String get themeLight;
   String get themeDark;
+  String get floatingNewContact;
 }

@@ -18,8 +18,12 @@ class _MainState extends State<Main> {
   bool _isDarkTeme = false;
   ThemeData _buildThemes(bool darkTheme, Color _headerColor) {
     return darkTheme
-        ? ThemeData.dark().copyWith(primaryColor: _headerColor)
-        : ThemeData.light().copyWith(primaryColor: _headerColor);
+        ? ThemeData.dark().copyWith(
+            primaryColor: _headerColor,
+          )
+        : ThemeData.light().copyWith(
+            primaryColor: _headerColor,
+          );
   }
 
   @override

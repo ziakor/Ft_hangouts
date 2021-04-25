@@ -295,13 +295,11 @@ Widget _buildLanguageDialog(BuildContext context) {
 }
 
 Widget _buildThemeDialog(BuildContext context) {
-  // convert en stfull
   List<String> themeList = [
     Languages.of(context).themeLight,
     Languages.of(context).themeDark,
   ];
   int _currentIndex = BlocProvider.of<ThemeBloc>(context).darktheme ? 1 : 0;
-
   void _changeTheme(BuildContext context, int index) {
     BlocProvider.of<ThemeBloc>(context).changeTheme(index == 0 ? false : true);
   }
