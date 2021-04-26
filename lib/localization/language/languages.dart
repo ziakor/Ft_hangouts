@@ -20,4 +20,6 @@ abstract class Languages {
   String get floatingNewContact;
   String get editContact;
   String get deleteContact;
+  String get delete;
+  String get newContactTitle;
 }

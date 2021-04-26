@@ -23,12 +23,20 @@ class _MainState extends State<Main> {
             floatingActionButtonTheme: FloatingActionButtonThemeData(
               foregroundColor: _headerColor,
             ),
+            textTheme: TextTheme(
+                bodyText1: TextStyle(color: Colors.white, fontSize: 20),
+                subtitle1:
+                    TextStyle(color: Colors.grey.shade200, fontSize: 14)),
           )
         : ThemeData.light().copyWith(
             primaryColor: _headerColor,
             floatingActionButtonTheme: FloatingActionButtonThemeData(
               foregroundColor: _headerColor,
             ),
+            textTheme: TextTheme(
+                bodyText1: TextStyle(color: Colors.black, fontSize: 20),
+                subtitle1:
+                    TextStyle(color: Colors.grey.shade800, fontSize: 14)),
           );
   }
 

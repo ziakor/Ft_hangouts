@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
-import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
+import 'package:ft_hangout/src/bloc/theme_bloc.dart';
 import 'package:ft_hangout/src/ui/components/scale_route.dart';
+import 'package:ft_hangout/src/ui/edit_contact.dart';
+import 'package:ft_hangout/src/ui/message.dart';
+import 'package:ft_hangout/src/ui/new_contact.dart';
 import 'package:ft_hangout/src/ui/settings.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,20 +15,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List _listContact = [
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
-    {"name": "dimitri hauet", "description": "bitasse"},
+    {"name": "dimitri hauet", "lastMessage": "bitasse"},
+    {"name": "dimitri hauet", "lastMessage": "bitasse"},
+    {"name": "dimitri hauet", "lastMessage": "bitasse"},
+    {"name": "dimitri hauet", "lastMessage": "bitasse"},
+    {"name": "dimitri hauet", "lastMessage": "bitasse"},
   ];
-  bool editContact = false;
+  bool _editContact = false;
+  int _selectedContactIndex;
   void _onSelectedPopupMenu(BuildContext context, int value) {
     switch (value) {
       case 0:
@@ -35,14 +32,30 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  void _editContact() {}
+  void _newContact(BuildContext context) {
+    Navigator.push(context, ScaleRoute(page: NewContact()));
+  }
 
-  void _deleteContact() {}
+  void _toMessage(BuildContext context) {
+    Navigator.push(context, ScaleRoute(page: Message()));
+  }
+
+  void _handleEditContact() {
+    Navigator.push(context, ScaleRoute(page: EditContact()));
+  }
+
+  void _deleteContact(int index) {
+    setState(() {
+      _editContact = false;
+      _selectedContactIndex = null;
+    });
+    _listContact.removeAt(index);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: editContact == false
+      appBar: _editContact == false
           ? AppBar(
               title: Text("Ft_hangouts"),
               actions: [
@@ -83,7 +96,8 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () {
                   setState(
                     () {
-                      editContact = false;
+                      _editContact = false;
+                      _selectedContactIndex = null;
                     },
                   );
                 },
@@ -93,13 +107,17 @@ class _MainScreenState extends State<MainScreen> {
                   splashRadius: 25,
                   icon: Icon(Icons.edit),
                   tooltip: Languages.of(context).editContact,
-                  onPressed: () {},
+                  onPressed: () {
+                    _handleEditContact();
+                  },
                 ),
                 IconButton(
                   splashRadius: 25,
                   icon: Icon(Icons.delete),
                   tooltip: Languages.of(context).deleteContact,
-                  onPressed: () {},
+                  onPressed: () {
+                    _deleteContact(_selectedContactIndex);
+                  },
                 ),
               ],
             ),
@@ -109,41 +127,54 @@ class _MainScreenState extends State<MainScreen> {
         itemBuilder: (BuildContext context, int index) {
           return Dismissible(
               key: ValueKey(_listContact[index]),
+              direction: DismissDirection.startToEnd,
               background: Container(
-                color: Colors.red.shade800,
-              ),
+                  color: Colors.red.shade800,
+                  alignment: Alignment.centerLeft,
+                  child: Text("    ${Languages.of(context).delete} ?")),
               onDismissed: (direction) {
-                print(direction);
-                setState(() {
-                  _listContact.removeAt(index);
-                });
+                _deleteContact(index);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("contact supprimé"),
+                  content: Text(
+                    "contact supprimé",
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),
+                  ),
+                  duration: Duration(seconds: 2),
                   backgroundColor: Theme.of(context).backgroundColor,
                 ));
               },
               child: ListTile(
+                dense: true,
                 leading: CircleAvatar(
                   child: Icon(
                     Icons.account_circle,
                     size: 40,
                   ),
                 ),
-                title: Text(_listContact[index]["name"]),
-                subtitle: Text(_listContact[index]["description"]),
+                selected: _selectedContactIndex == index ? true : false,
+                selectedTileColor: BlocProvider.of<ThemeBloc>(context).darktheme
+                    ? Colors.black38
+                    : Colors.grey.shade300,
+                title: Text(_listContact[index]["name"],
+                    style: Theme.of(context).textTheme.bodyText1),
+                subtitle: Text(
+                  _listContact[index]["lastMessage"],
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
                 onTap: () {
-                  if (editContact)
+                  if (_editContact)
                     setState(() {
-                      editContact = false;
+                      _editContact = false;
                     });
                   else {
-                    //show message
+                    _toMessage(context);
                   }
-                  //show message
                 },
                 onLongPress: () {
                   setState(() {
-                    editContact = true;
+                    _editContact = true;
+                    _selectedContactIndex = index;
                   });
                 },
               ));
@@ -152,20 +183,19 @@ class _MainScreenState extends State<MainScreen> {
           return Container(
             width: double.infinity,
             height: 0.5,
-            color: Colors.grey.shade300,
+            color: Theme.of(context).dividerColor,
           );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _newContact(context),
         tooltip: Languages.of(context).floatingNewContact,
+        backgroundColor: Theme.of(context).primaryColor,
         child: Icon(
           Icons.add,
-          color: Colors.black,
+          color: Colors.white,
         ),
-        backgroundColor:
-            BlocProvider.of<HeaderColorBloc>(context).selectedHeaderColor,
       ),
     );
   }

@@ -17,4 +17,6 @@ class LanguageFr extends Languages {
   String get floatingNewContact => "Nouveau contact";
   String get editContact => "Éditer";
   String get deleteContact => "Supprimer";
+  String get delete => "Supprimer";
+  String get newContactTitle => "Nouveau contact";
 }

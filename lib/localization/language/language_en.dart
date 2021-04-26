@@ -16,5 +16,7 @@ class LanguageEn extends Languages {
   String get themeDark => "Dark";
   String get floatingNewContact => "New contact";
   String get editContact => "Edit";
-  String get deleteContact => "Delet";
+  String get deleteContact => "Delete";
+  String get delete => "Delete";
+  String get newContactTitle => "New contact";
 }
