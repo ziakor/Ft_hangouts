@@ -18,4 +18,6 @@ abstract class Languages {
   String get themeLight;
   String get themeDark;
   String get floatingNewContact;
+  String get editContact;
+  String get deleteContact;
 }

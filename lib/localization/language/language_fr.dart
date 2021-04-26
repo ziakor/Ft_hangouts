@@ -15,4 +15,6 @@ class LanguageFr extends Languages {
   String get themeLight => "Clair";
   String get themeDark => "Sombre";
   String get floatingNewContact => "Nouveau contact";
+  String get editContact => "Éditer";
+  String get deleteContact => "Supprimer";
 }

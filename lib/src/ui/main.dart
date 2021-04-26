@@ -20,9 +20,15 @@ class _MainState extends State<Main> {
     return darkTheme
         ? ThemeData.dark().copyWith(
             primaryColor: _headerColor,
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              foregroundColor: _headerColor,
+            ),
           )
         : ThemeData.light().copyWith(
             primaryColor: _headerColor,
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              foregroundColor: _headerColor,
+            ),
           );
   }
 
