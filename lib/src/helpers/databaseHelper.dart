@@ -27,7 +27,7 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''CREATE TABLE `Contact` (
-      `id` INTEGER PRIMARY_KEY,
+      `id` INTEGER PRIMARY KEY,
       `firstName` TEXT,
       `lastName` TEXT,
       `phone` TEXT,
@@ -35,15 +35,13 @@ class DatabaseHelper {
       `address` TEXT,
       `birthday` TEXT,
       `image` TEXT,
-      `notes` TEXT,
-      PRIMARY KEY (`id`)
+      `notes` TEXT
       );
       CREATE TABLE `Message` (
-        `id` INTEGER PRIMARY_KEY,
+        `id` INTEGER PRIMARY KEY,
         `message` INT NOT NULL,
         `Time` INT NOT NULL,
-        `idContact` INT NOT NULL,
-        PRIMARY KEY (`id`)
+        `idContact` INT NOT NULL
       );''');
     print("Table is created!");
   }
@@ -100,22 +98,25 @@ class DatabaseHelper {
 
     return db.rawDelete("DELETE FROM Contact WHERE id = ?", [contactId]).then(
         (value) {
+      print(">>$value");
       return value;
     }).catchError((value) {
-      print("error delete : $value");
+      print("error  delete contact : $value");
       return -1;
     });
   }
 
-  Future<List> getContacts() async {
+  Future<List<Map>> getContacts() async {
     Database db = await instance.database;
-
+    // String path = join(await getDatabasesPath(), _databaseName);
+    // deleteDatabase(path);
     try {
       var res = await db
           .rawQuery("SELECT id, firstName, lastName, phone FROM Contact");
+
       return res;
     } catch (e) {
-      print("error delete : $e");
+      print("error getCOntact : $e");
       return [];
     }
   }
@@ -131,7 +132,7 @@ class DatabaseHelper {
     ).then((value) {
       return value;
     }).catchError((value) {
-      print("error delete : $value");
+      print("error insert : $value");
       return -1;
     });
   }
@@ -143,8 +144,12 @@ class DatabaseHelper {
       "DELETE FROM Message WHERE id = ?",
       [messageId],
     ).then((value) {
+      print(value);
       return value;
-    }).catchError((_) => -1);
+    }).catchError((value) {
+      print("error delete : $value");
+      return -1;
+    });
   }
 
 //

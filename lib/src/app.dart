@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
+import 'package:ft_hangout/src/bloc/contact_bloc.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/theme_bloc.dart';
 import 'package:ft_hangout/src/helpers/DatabaseHelper.dart';
@@ -26,7 +27,10 @@ class _AppState extends State<App> {
         bloc: HeaderColorBloc(),
         child: BlocProvider<ThemeBloc>(
           bloc: ThemeBloc(),
-          child: Main(),
+          child: BlocProvider<ContactBloc>(
+            bloc: ContactBloc(),
+            child: Main(),
+          ),
         ),
       ),
     );

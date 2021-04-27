@@ -19,4 +19,13 @@ class LanguageEn extends Languages {
   String get deleteContact => "Delete";
   String get delete => "Delete";
   String get newContactTitle => "New contact";
+  String get labelFirstName => "Firstname";
+  String get labelLastName => "Lastname";
+  String get labelPhoneNumber => "Phone number";
+  String get labelEmail => "Email";
+  String get labelBirthday => "Birthday";
+  String get labelNotes => "Notes";
+  String get invalidPhoneNumber => "Please enter the phone number";
+  String get invalidFirstName => "Please enter the firstname";
+  String get contactDeletedMessage => "Contact deleted";
 }

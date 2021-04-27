@@ -19,4 +19,13 @@ class LanguageFr extends Languages {
   String get deleteContact => "Supprimer";
   String get delete => "Supprimer";
   String get newContactTitle => "Nouveau contact";
+  String get labelFirstName => "Prénom";
+  String get labelLastName => "Nom";
+  String get labelPhoneNumber => "Numéro de téléphone";
+  String get labelEmail => "Adresse mail";
+  String get labelBirthday => "Anniversaire";
+  String get labelNotes => "Notes";
+  String get invalidPhoneNumber => "Veuillez entrer le numéro de téléphone";
+  String get invalidFirstName => "Veuillez entrer le prénom";
+  String get contactDeletedMessage => "Contact supprimé";
 }

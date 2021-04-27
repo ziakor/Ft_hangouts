@@ -22,4 +22,13 @@ abstract class Languages {
   String get deleteContact;
   String get delete;
   String get newContactTitle;
+  String get labelFirstName;
+  String get labelLastName;
+  String get labelPhoneNumber;
+  String get labelEmail;
+  String get labelBirthday;
+  String get labelNotes;
+  String get invalidPhoneNumber;
+  String get invalidFirstName;
+  String get contactDeletedMessage;
 }
