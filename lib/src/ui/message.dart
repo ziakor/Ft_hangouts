@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:ft_hangout/localization/language/languages.dart';
+import 'package:ft_hangout/src/bloc/bloc_provider.dart';
+import 'package:ft_hangout/src/bloc/message_bloc.dart';
+import 'package:ft_hangout/src/bloc/theme_bloc.dart';
+import 'package:ft_hangout/src/models/message.dart';
 
-class Message extends StatefulWidget {
+class MessagePage extends StatefulWidget {
   //le plus recent -> index 0;
+  final int idContact;
 
-  Message({Key key}) : super(key: key);
-
+  MessagePage({Key key, @required this.idContact}) : super(key: key);
   @override
-  _MessageState createState() => _MessageState();
+  _MessagePageState createState() => _MessagePageState();
 }
 
-class _MessageState extends State<Message> {
-  List<Map> messageList = [
-    {"id": 0, "message": "je suis une bite 1", "timestamp": 1, "fromMe": true},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": true},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": true},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": true},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": true},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": true},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": false},
-    {"id": 1, "message": "non cest moi", "timestamp": 2, "fromMe": true},
-  ];
+class _MessagePageState extends State<MessagePage> {
+  List<Map> messageList = [];
+
+  _sendMessage(BuildContext context, String message, int timeStamp) {
+    BlocProvider.of<MessageBloc>(context).sendMessage(
+      Message(
+          message: message,
+          time: timeStamp,
+          idContact: widget.idContact,
+          fromMe: 1),
+    );
+  }
+
+  var _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,32 +35,110 @@ class _MessageState extends State<Message> {
         title: Text("nom"),
         //ajouter popumenu avec Details
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              itemCount: messageList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Container(
-                    alignment: messageList[index]["fromMe"]
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: Text(
-                      messageList[index]["message"],
-                    ),
+      body: StreamBuilder(
+          stream: BlocProvider.of<MessageBloc>(context).messageStream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              BlocProvider.of<MessageBloc>(context)
+                  .getMessage(widget.idContact);
+            }
+            messageList = BlocProvider.of<MessageBloc>(context).messageList;
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    reverse: true,
+                    itemCount: messageList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      // bool position = messageList.length
+                      DateTime messageTime =
+                          DateTime.fromMillisecondsSinceEpoch(
+                              messageList[index]["time"]);
+                      print(
+                          "time :${messageList[index]["time"]} : $messageTime");
+                      return Container(
+                        alignment: Alignment.centerLeft, //Position fromMe
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: BlocProvider.of<ThemeBloc>(context)
+                                          .darktheme
+                                      ? Colors.black38
+                                      : Colors.grey.shade300,
+                                  border: Border.all(
+                                      width: 0.0, style: BorderStyle.none),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(7.0),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start, // position subtitleFromMe
+                                    children: [
+                                      Text(
+                                        messageList[index]["message"]
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .color,
+                                            fontSize: 13),
+                                      ),
+                                      Text(
+                                        "${messageTime.day}/${messageTime.month}/${messageTime.year} ${messageTime.hour}h${messageTime.minute}",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .subtitle1
+                                                .color,
+                                            fontSize: 7),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-          TextField(
-            decoration: InputDecoration(
-                border: OutlineInputBorder(), hintText: "message"),
-          )
-        ],
-      ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () {
+                            _sendMessage(context, _controller.text,
+                                DateTime.now().millisecondsSinceEpoch);
+                            FocusScope.of(context).unfocus();
+                            _controller.text = "";
+                          }),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      hintText: "message",
+                    ),
+                    onSubmitted: (value) {
+                      _sendMessage(context, value,
+                          DateTime.now().millisecondsSinceEpoch);
+                      FocusScope.of(context).unfocus();
+                      _controller.text = "";
+                    },
+                  ),
+                )
+              ],
+            );
+          }),
     );
   }
 }

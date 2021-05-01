@@ -24,6 +24,7 @@ class ContactBloc implements Bloc {
       "phone": contact.phone,
       "email": contact.email,
       "birthday": contact.birthday,
+      "address": contact.address,
       "notes": contact.notes,
     });
     contactSink.add(_contactList);

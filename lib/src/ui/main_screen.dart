@@ -31,8 +31,13 @@ class _MainScreenState extends State<MainScreen> {
     Navigator.push(context, ScaleRoute(page: NewContact()));
   }
 
-  void _toMessage(BuildContext context) {
-    Navigator.push(context, ScaleRoute(page: Message()));
+  void _toMessage(BuildContext context, int idContact) {
+    Navigator.push(
+        context,
+        ScaleRoute(
+            page: MessagePage(
+          idContact: idContact,
+        )));
   }
 
   void _handleEditContact() {
@@ -178,7 +183,7 @@ class _MainScreenState extends State<MainScreen> {
                             _editContact = false;
                           });
                         else {
-                          _toMessage(context);
+                          _toMessage(context, _listContact[index]["id"]);
                         }
                       },
                       onLongPress: () {

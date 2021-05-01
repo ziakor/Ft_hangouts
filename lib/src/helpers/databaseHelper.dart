@@ -34,24 +34,25 @@ class DatabaseHelper {
       `email` TEXT,
       `address` TEXT,
       `birthday` TEXT,
-      `image` TEXT,
       `notes` TEXT
-      );
-      CREATE TABLE `Message` (
+      );''');
+    print("Table Contact is created!");
+    await db.execute(''' CREATE TABLE `Message` (
         `id` INTEGER PRIMARY KEY,
         `message` INT NOT NULL,
-        `Time` INT NOT NULL,
+        `time` INT NOT NULL,
+        `fromMe` INT NOT NULL,
         `idContact` INT NOT NULL
       );''');
-    print("Table is created!");
+    print("Table Message is created");
   }
 
-// CONTACT
+//! CONTACT
   Future<int> insertContact(Contact contact) async {
     Database db = await instance.database;
 
     return db.rawInsert(
-      'INSERT INTO Contact(firstName, lastName, phone, email, address, birthday, image, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO Contact(firstName, lastName, phone, email, address, birthday, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [
         contact.firstName,
         contact.lastName,
@@ -59,7 +60,6 @@ class DatabaseHelper {
         contact.email,
         contact.address,
         contact.birthday,
-        contact.image,
         contact.notes,
       ],
     ).then((value) {
@@ -73,7 +73,7 @@ class DatabaseHelper {
   Future<int> updateContact(Contact contact) async {
     Database db = await instance.database;
     return db.rawUpdate(
-      "UPDATE Contact SET firstName = ?, lastName = ?, phone = ?, email = ?, address = ?, birthday = ?, image = ?, notes = ? WHERE id = ?",
+      "UPDATE Contact SET firstName = ?, lastName = ?, phone = ?, email = ?, address = ?, birthday = ?, notes = ? WHERE id = ?",
       [
         contact.firstName,
         contact.lastName,
@@ -81,7 +81,6 @@ class DatabaseHelper {
         contact.email,
         contact.address,
         contact.address,
-        contact.image,
         contact.notes,
         contact.id,
       ],
@@ -121,14 +120,13 @@ class DatabaseHelper {
     }
   }
 
-// END CONTACT
-
+//! MESSAGE
   Future<int> insertMessage(Message message) async {
     Database db = await instance.database;
 
     return db.rawInsert(
-      "INSERT INTO Message(message,time,idContact) VALUES(?, ?, ?)",
-      [message.message, message.time, message.idContact],
+      'INSERT INTO Message(message, time, idContact, fromMe) VALUES(?, ?, ?, ?)',
+      [message.message, message.time, message.idContact, message.fromMe],
     ).then((value) {
       return value;
     }).catchError((value) {
@@ -137,20 +135,16 @@ class DatabaseHelper {
     });
   }
 
-  Future<int> deleteMessage(int messageId) async {
+  Future<List<Map>> getMessages(int idContact) async {
     Database db = await instance.database;
-
-    return db.rawDelete(
-      "DELETE FROM Message WHERE id = ?",
-      [messageId],
-    ).then((value) {
-      print(value);
-      return value;
-    }).catchError((value) {
-      print("error delete : $value");
-      return -1;
-    });
+    try {
+      var res = await db.rawQuery(
+          "SELECT id, message, time, idContact, fromMe FROM Message WHERE idcontact = ?",
+          [idContact]);
+      return res;
+    } catch (e) {
+      print("error getMessages: $e");
+      return [];
+    }
   }
-
-//
 }

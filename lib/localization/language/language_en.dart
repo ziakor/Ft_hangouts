@@ -28,4 +28,6 @@ class LanguageEn extends Languages {
   String get invalidPhoneNumber => "Please enter the phone number";
   String get invalidFirstName => "Please enter the firstname";
   String get contactDeletedMessage => "Contact deleted";
+  String get labelAddress => "Address";
+  String get at => "at";
 }

@@ -6,7 +6,6 @@ class Contact {
   final String email;
   final String address;
   final String birthday;
-  final String image;
   final String notes;
 
   Contact({
@@ -17,7 +16,6 @@ class Contact {
     this.email,
     this.address,
     this.birthday,
-    this.image,
     this.notes,
   });
 
@@ -30,7 +28,6 @@ class Contact {
       'email': email,
       'address': address,
       'birthday': birthday,
-      'image': image,
       'notes': notes,
     };
   }
