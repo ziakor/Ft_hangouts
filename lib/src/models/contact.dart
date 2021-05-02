@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class Contact {
   final int id;
   final String firstName;
@@ -10,13 +12,13 @@ class Contact {
 
   Contact({
     this.id,
-    this.firstName,
-    this.lastName,
-    this.phone,
-    this.email,
-    this.address,
-    this.birthday,
-    this.notes,
+    @required this.firstName,
+    @required this.lastName,
+    @required this.phone,
+    @required this.email,
+    @required this.address,
+    @required this.birthday,
+    @required this.notes,
   });
 
   Map<String, dynamic> toMap() {

@@ -29,5 +29,4 @@ class LanguageEn extends Languages {
   String get invalidFirstName => "Please enter the firstname";
   String get contactDeletedMessage => "Contact deleted";
   String get labelAddress => "Address";
-  String get at => "at";
 }

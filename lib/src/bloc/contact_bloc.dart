@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:ft_hangout/src/bloc/bloc.dart';
 import 'package:ft_hangout/src/models/contact.dart';
 import '../helpers/databaseHelper.dart';
@@ -12,7 +13,17 @@ class ContactBloc implements Bloc {
   Stream<List<dynamic>> get contactStream => _contactController.stream;
 
   void getContactList() async {
-    _contactList = List.from(await DatabaseHelper.instance.getContacts());
+    List<Map> tmp = await DatabaseHelper.instance.getContacts();
+    tmp.forEach((element) => _contactList.add({
+          "id": element["id"],
+          "firstName": element["firstName"],
+          "lastName": element["lastName"],
+          "phone": element["phone"],
+          "email": element["email"],
+          "birthday": element["birthday"],
+          "address": element["address"],
+          "notes": element["notes"],
+        }));
     contactSink.add(_contactList);
   }
 
@@ -30,9 +41,15 @@ class ContactBloc implements Bloc {
     contactSink.add(_contactList);
   }
 
+  void updateContactList(int idContact, String field, String value) {
+    int index =
+        _contactList.indexWhere((element) => element["id"] == idContact);
+    _contactList[index][field] = value;
+    contactSink.add(_contactList);
+  }
+
   void removeContact(int id) async {
     await DatabaseHelper.instance.deleteContact(_contactList[id]["id"]);
-
     contactSink.add(_contactList);
   }
 

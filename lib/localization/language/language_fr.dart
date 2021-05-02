@@ -29,5 +29,4 @@ class LanguageFr extends Languages {
   String get invalidFirstName => "Veuillez entrer le prénom";
   String get contactDeletedMessage => "Contact supprimé";
   String get labelAddress => "Adresse";
-  String get at => "à";
 }

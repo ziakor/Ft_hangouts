@@ -32,5 +32,4 @@ abstract class Languages {
   String get invalidFirstName;
   String get contactDeletedMessage;
   String get labelAddress;
-  String get at;
 }

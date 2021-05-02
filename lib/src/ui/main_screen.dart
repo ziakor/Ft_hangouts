@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/contact_bloc.dart';
+import 'package:ft_hangout/src/bloc/contact_detail_bloc.dart';
 import 'package:ft_hangout/src/bloc/theme_bloc.dart';
 import 'package:ft_hangout/src/ui/components/scale_route.dart';
-import 'package:ft_hangout/src/ui/edit_contact.dart';
+import 'package:ft_hangout/src/ui/detail_contact.dart';
 import 'package:ft_hangout/src/ui/message.dart';
 import 'package:ft_hangout/src/ui/new_contact.dart';
 import 'package:ft_hangout/src/ui/settings.dart';
@@ -40,8 +41,21 @@ class _MainScreenState extends State<MainScreen> {
         )));
   }
 
-  void _handleEditContact() {
-    Navigator.push(context, ScaleRoute(page: EditContact()));
+  void handleDetailContact(int idContact) {
+    setState(
+      () {
+        _editContact = false;
+        _selectedContactIndex = null;
+      },
+    );
+    Navigator.push(
+        context,
+        ScaleRoute(
+            page: BlocProvider(
+                bloc: ContactDetailBloc(),
+                child: DetailContactEditable(
+                  contactId: idContact,
+                ))));
   }
 
   void _deleteContact(int index) async {
@@ -65,7 +79,6 @@ class _MainScreenState extends State<MainScreen> {
             // print(snapshot.data);
             _listContact = snapshot.data;
           }
-          print("Snapshot: ${snapshot.data}");
           return Scaffold(
             appBar: _editContact == false
                 ? AppBar(
@@ -117,10 +130,11 @@ class _MainScreenState extends State<MainScreen> {
                     actions: [
                       IconButton(
                         splashRadius: 25,
-                        icon: Icon(Icons.edit),
+                        icon: Icon(Icons.account_circle),
                         tooltip: Languages.of(context).editContact,
                         onPressed: () {
-                          _handleEditContact();
+                          handleDetailContact(
+                              _listContact[_selectedContactIndex]["id"]);
                         },
                       ),
                       IconButton(

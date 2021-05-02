@@ -70,19 +70,13 @@ class DatabaseHelper {
     });
   }
 
-  Future<int> updateContact(Contact contact) async {
+  Future<int> updateContact(String field, String value, int id) async {
     Database db = await instance.database;
     return db.rawUpdate(
-      "UPDATE Contact SET firstName = ?, lastName = ?, phone = ?, email = ?, address = ?, birthday = ?, notes = ? WHERE id = ?",
+      "UPDATE Contact SET $field = ? WHERE id = ?",
       [
-        contact.firstName,
-        contact.lastName,
-        contact.phone,
-        contact.email,
-        contact.address,
-        contact.address,
-        contact.notes,
-        contact.id,
+        value,
+        id,
       ],
     ).then((value) {
       return value;
@@ -117,6 +111,23 @@ class DatabaseHelper {
     } catch (e) {
       print("error getCOntact : $e");
       return [];
+    }
+  }
+
+  Future<Map> getContactdetail(int idContact) async {
+    Database db = await instance.database;
+
+    try {
+      var res =
+          await db.rawQuery("SELECT * FROM Contact WHERE id = ?", [idContact]);
+      print("res : $res");
+      if (res.length > 0) {
+        return (res[0]);
+      } else
+        return null;
+    } catch (e) {
+      print("error getContactDetail : $e");
+      return null;
     }
   }
 
