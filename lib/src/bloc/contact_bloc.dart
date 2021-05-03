@@ -28,8 +28,9 @@ class ContactBloc implements Bloc {
   }
 
   void addContact(Contact contact) async {
-    await DatabaseHelper.instance.insertContact(contact);
+    int newId = await DatabaseHelper.instance.insertContact(contact);
     _contactList.add({
+      "id": newId,
       "firstName": contact.firstName,
       "lastName": contact.lastName,
       "phone": contact.phone,

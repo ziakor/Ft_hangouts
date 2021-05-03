@@ -40,17 +40,18 @@ class ContactDetailBloc implements Bloc {
 
   void getContactDetail(int idContact) async {
     var data = await DatabaseHelper.instance.getContactdetail(idContact);
-
-    _contactData = {
-      "firstName": data["firstName"] ?? "",
-      "lastName": data["lastName"] ?? "",
-      "phone": data["phone"] ?? "",
-      "email": data["email"] ?? "",
-      "birthday": data["birthday"] ?? "",
-      "address": data["address"] ?? "",
-      "notes": data["address"] ?? "",
-    };
-    contactDataSink.add(_contactData);
+    if (data != null) {
+      _contactData = {
+        "firstName": data["firstName"] ?? "",
+        "lastName": data["lastName"] ?? "",
+        "phone": data["phone"] ?? "",
+        "email": data["email"] ?? "",
+        "birthday": data["birthday"] ?? "",
+        "address": data["address"] ?? "",
+        "notes": data["address"] ?? "",
+      };
+      contactDataSink.add(_contactData);
+    }
   }
 
   @override

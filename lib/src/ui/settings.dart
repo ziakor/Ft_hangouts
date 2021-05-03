@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
+import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
 import 'package:ft_hangout/src/bloc/theme_bloc.dart';
+import 'package:ft_hangout/src/ui/components/time_paused.dart';
 
 class Settings extends StatefulWidget {
   Settings({Key key}) : super(key: key);
@@ -19,64 +21,73 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         title: Text(Languages.of(context).settings),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.color_lens,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    title: Text(Languages.of(context).settingsTheme),
-                    onTap: () {
-                      showDialog(context: context, builder: _buildThemeDialog);
-                    },
-                    trailing: Icon(Icons.keyboard_arrow_right),
+      body: GestureDetector(
+        onTap: () => BlocProvider.of<AppLifecycleBloc>(context).close(),
+        child: Container(
+          constraints: BoxConstraints.expand(),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TimePaused(),
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Icon(
+                          Icons.color_lens,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        title: Text(Languages.of(context).settingsTheme),
+                        onTap: () {
+                          showDialog(
+                              context: context, builder: _buildThemeDialog);
+                        },
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 0.5,
+                        color: Colors.grey,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.colorize,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        title: Text(Languages.of(context).settingsHeaderColor),
+                        onTap: () {
+                          showDialog(
+                              context: context, builder: _buildHeaderDialog);
+                        },
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 0.5,
+                        color: Colors.grey,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.language,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        title: Text(Languages.of(context).settingsLanguage),
+                        onTap: () {
+                          showDialog(
+                              context: context, builder: _buildLanguageDialog);
+                        },
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                      ),
+                    ],
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 0.5,
-                    color: Colors.grey,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.colorize,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    title: Text(Languages.of(context).settingsHeaderColor),
-                    onTap: () {
-                      showDialog(context: context, builder: _buildHeaderDialog);
-                    },
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 0.5,
-                    color: Colors.grey,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.language,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    title: Text(Languages.of(context).settingsLanguage),
-                    onTap: () {
-                      showDialog(
-                          context: context, builder: _buildLanguageDialog);
-                    },
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                  ),
-                ],
-              ),
-            )
-          ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

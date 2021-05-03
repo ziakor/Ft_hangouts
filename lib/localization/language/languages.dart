@@ -29,7 +29,9 @@ abstract class Languages {
   String get labelBirthday;
   String get labelNotes;
   String get invalidPhoneNumber;
+  String get invalidPhoneNumberEmpty;
   String get invalidFirstName;
+  String get invalidEmail;
   String get contactDeletedMessage;
   String get labelAddress;
 }

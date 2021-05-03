@@ -25,8 +25,10 @@ class LanguageEn extends Languages {
   String get labelEmail => "Email";
   String get labelBirthday => "Birthday";
   String get labelNotes => "Notes";
-  String get invalidPhoneNumber => "Please enter the phone number";
+  String get invalidPhoneNumberEmpty => "Please enter a phone number";
+  String get invalidPhoneNumber => "Please enter a valid phone number";
   String get invalidFirstName => "Please enter the firstname";
+  String get invalidEmail => "Please enter a valid email address";
   String get contactDeletedMessage => "Contact deleted";
   String get labelAddress => "Address";
 }

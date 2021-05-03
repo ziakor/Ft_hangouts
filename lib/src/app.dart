@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/contact_bloc.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
@@ -15,12 +16,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   @override
-  void initState() {
-    super.initState();
-    DatabaseHelper.instance.getContacts();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider<LanguageBloc>(
       bloc: LanguageBloc(),
@@ -32,7 +27,10 @@ class _AppState extends State<App> {
             bloc: ContactBloc(),
             child: BlocProvider<MessageBloc>(
               bloc: MessageBloc(),
-              child: Main(),
+              child: BlocProvider(
+                bloc: AppLifecycleBloc(),
+                child: Main(),
+              ),
             ),
           ),
         ),

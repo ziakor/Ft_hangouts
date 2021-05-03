@@ -25,8 +25,14 @@ class LanguageFr extends Languages {
   String get labelEmail => "Adresse mail";
   String get labelBirthday => "Anniversaire";
   String get labelNotes => "Notes";
-  String get invalidPhoneNumber => "Veuillez entrer le numéro de téléphone";
+  String get invalidPhoneNumber =>
+      "Veuillez entrer un numéro de téléphone valide";
+
+  String get invalidPhoneNumberEmpty =>
+      "Veuillez entrer le numéro de téléphone";
   String get invalidFirstName => "Veuillez entrer le prénom";
+  String get invalidEmail => "Veuillez entrer une adresse mail valide";
+
   String get contactDeletedMessage => "Contact supprimé";
   String get labelAddress => "Adresse";
 }

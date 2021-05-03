@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
+import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/contact_bloc.dart';
 import 'package:ft_hangout/src/models/contact.dart';
+import 'package:ft_hangout/src/ui/components/time_paused.dart';
 
 class NewContact extends StatefulWidget {
   NewContact({Key key}) : super(key: key);
@@ -22,7 +24,9 @@ class _NewContactState extends State<NewContact> {
     "notes": null
   };
   final _formKey = GlobalKey<FormState>();
-  DateTime selectedDate = DateTime.now();
+  TextEditingController _controller = new TextEditingController();
+  FocusNode _birthdayNode = new FocusNode();
+  DateTime _selectedDate = DateTime.now();
   _validatorSubmit(List<String> data) {
     if (data.every((element) => element != null && element.isEmpty == false)) {
       setState(() {
@@ -34,30 +38,41 @@ class _NewContactState extends State<NewContact> {
       });
   }
 
-  String _validateMobilePhone(String value) {
-    String patttern = r'(^\s*\+?\s*([0-9][\s-]*){9,}$)';
-    RegExp regExp = new RegExp(patttern);
+  String _validateMobilePhone(String value, BuildContext context) {
+    String pattern = r'(^\s*\+?\s*([0-9][\s-]*){9,}$)';
+    RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
-      return 'Please enter mobile number';
+      return Languages.of(context).invalidPhoneNumberEmpty;
     } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
+      return Languages.of(context).invalidPhoneNumber;
     }
     return null;
+  }
+
+  bool _validateEmail(String value) {
+    String pattern =
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    RegExp regExp = new RegExp(pattern);
+    print("$value | ${regExp.hasMatch(value)}");
+    if (value.length > 0) {
+      if (!regExp.hasMatch(value)) return false;
+    }
+    return true;
   }
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate, // Refer step 1
+      initialDate: _selectedDate, // Refer step 1
       firstDate: DateTime(1900),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != _selectedDate)
       setState(() {
         _contactData["birthday"] =
             "${picked.day}/${picked.month}/${picked.year}";
+        _controller.text = "${picked.day}/${picked.month}/${picked.year}";
       });
-    _controller.text = "${picked.day}/${picked.month}/${picked.year}";
   }
 
   _newContact(BuildContext context) async {
@@ -73,7 +88,6 @@ class _NewContactState extends State<NewContact> {
     Navigator.pop(context);
   }
 
-  TextEditingController _controller = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -91,122 +105,146 @@ class _NewContactState extends State<NewContact> {
             )
           ],
         ),
-        body: Form(
-          autovalidateMode: AutovalidateMode.always,
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.fromLTRB(16, 10, 16, 0),
-                  title: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "${Languages.of(context).labelFirstName}*",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return Languages.of(context).invalidFirstName;
-                      return null;
-                    },
-                    onChanged: (value) {
-                      _contactData["firstName"] = value;
-                      _validatorSubmit(
-                        [
-                          _contactData["firstName"],
-                          _contactData["phone"],
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                ListTile(
-                  title: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: Languages.of(context).labelLastName,
-                    ),
-                    onChanged: (value) {
-                      _contactData["lastName"] = value;
-                    },
-                  ),
-                ),
-                ListTile(
-                  title: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "${Languages.of(context).labelPhoneNumber}*",
-                    ),
-                    validator: (value) {
-                      return _validateMobilePhone(value);
-                    },
-                    onChanged: (value) {
-                      _contactData["phone"] = value;
-                      _validatorSubmit(
-                        [
-                          _contactData["firstName"],
-                          _contactData["phone"],
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                ListTile(
-                  title: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: Languages.of(context).labelEmail,
-                    ),
-                    onChanged: (value) {
-                      _contactData["email"] = value;
-                    },
-                  ),
-                ),
-                ListTile(
-                  title: TextFormField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText:
-                          "${Languages.of(context).labelBirthday} DD/MM/AAAA",
-                    ),
-                    onChanged: (value) {
-                      _contactData["birthday"] = value;
-                    },
-                  ),
-                  trailing: IconButton(
-                      iconSize: 40,
-                      tooltip: "Select date",
-                      icon: Icon(
-                        Icons.date_range_outlined,
+        body: Container(
+          child: GestureDetector(
+            onTap: () => BlocProvider.of<AppLifecycleBloc>(context).close(),
+            child: Container(
+              constraints: BoxConstraints.expand(),
+              child: Form(
+                autovalidateMode: AutovalidateMode.always,
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TimePaused(),
+                      ListTile(
+                        contentPadding: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                        title: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText:
+                                "${Languages.of(context).labelFirstName}*",
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return Languages.of(context).invalidFirstName;
+                            return null;
+                          },
+                          onChanged: (value) {
+                            _contactData["firstName"] = value;
+                            _validatorSubmit(
+                              [
+                                _contactData["firstName"],
+                                _contactData["phone"],
+                              ],
+                            );
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        _selectDate(context);
-                      }),
-                ),
-                ListTile(
-                  title: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: Languages.of(context).labelAddress,
-                    ),
-                    onChanged: (value) {
-                      _contactData["address`"] = value;
-                    },
+                      ListTile(
+                        title: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: Languages.of(context).labelLastName,
+                          ),
+                          onChanged: (value) {
+                            _contactData["lastName"] = value;
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText:
+                                "${Languages.of(context).labelPhoneNumber}*",
+                          ),
+                          validator: (value) {
+                            return _validateMobilePhone(value, context);
+                          },
+                          onChanged: (value) {
+                            _contactData["phone"] = value;
+                            _validatorSubmit(
+                              [
+                                _contactData["firstName"],
+                                _contactData["phone"],
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: Languages.of(context).labelEmail,
+                          ),
+                          validator: (value) {
+                            if (!_validateEmail(value)) {
+                              return Languages.of(context).invalidEmail;
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            _contactData["email"] = value;
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: TextFormField(
+                          controller: _controller,
+                          focusNode: _birthdayNode,
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText:
+                                "${Languages.of(context).labelBirthday} DD/MM/AAAA",
+                            suffixIcon: IconButton(
+                                iconSize: 40,
+                                tooltip: "Select date",
+                                icon: Icon(
+                                  Icons.date_range_outlined,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  _selectDate(context);
+                                }),
+                          ),
+                          onChanged: (value) {
+                            _contactData["birthday"] = value;
+                          },
+                          onTap: () {
+                            _birthdayNode.unfocus();
+                            _birthdayNode.canRequestFocus = false;
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: Languages.of(context).labelAddress,
+                          ),
+                          onChanged: (value) {
+                            _contactData["address`"] = value;
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: Languages.of(context).labelNotes,
+                          ),
+                          onChanged: (value) {
+                            _contactData["notes"] = value;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                ListTile(
-                  title: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: Languages.of(context).labelNotes,
-                    ),
-                    onChanged: (value) {
-                      _contactData["notes"] = value;
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

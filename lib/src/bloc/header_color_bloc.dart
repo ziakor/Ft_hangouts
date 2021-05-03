@@ -41,7 +41,7 @@ class HeaderColorBloc implements Bloc {
 
   void initHeaderColor() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    final int index = _prefs.getInt("selectedHeaderColor");
+    final int index = _prefs.getInt("selectedHeaderColor") ?? -1;
     _headerColor = _colorList[index >= 0 ? index : 3];
     headerColorSink.add(_headerColor);
   }

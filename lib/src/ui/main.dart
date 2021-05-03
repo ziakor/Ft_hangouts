@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
@@ -12,10 +13,29 @@ class Main extends StatefulWidget {
   _MainState createState() => _MainState();
 }
 
-class _MainState extends State<Main> {
+class _MainState extends State<Main> with WidgetsBindingObserver {
   Locale _locale;
   Color _headerColor;
   bool _isDarkTeme = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    BlocProvider.of<AppLifecycleBloc>(context).handleAppLifecycleState(state);
+    super.didChangeAppLifecycleState(state);
+  }
+
   ThemeData _buildThemes(bool darkTheme, Color _headerColor) {
     return darkTheme
         ? ThemeData.dark().copyWith(
