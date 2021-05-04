@@ -21,6 +21,7 @@ class LanguageBloc implements Bloc {
 
   void initLanguage() async {
     _locale = await getLocale();
+
     localeSink.add(_locale);
   }
 
