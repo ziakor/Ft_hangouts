@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
-import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
+import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/contact_bloc.dart';
 import 'package:ft_hangout/src/bloc/contact_detail_bloc.dart';
@@ -166,7 +166,7 @@ class _DetailContactEditableState extends State<DetailContactEditable> {
               title: Text(Languages.of(context).newContactTitle),
             ),
             body: GestureDetector(
-              onTap: () => BlocProvider.of<AppLifecycleBloc>(context).close(),
+              onTap: () => BlocProvider.of<PausedTimeBloc>(context).close(),
               child: Container(
                 constraints: BoxConstraints.expand(),
                 child: SingleChildScrollView(

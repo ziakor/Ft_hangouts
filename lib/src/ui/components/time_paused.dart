@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
+import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 
 class TimePaused extends StatefulWidget {
@@ -14,7 +14,7 @@ class _TimePausedState extends State<TimePaused> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: BlocProvider.of<AppLifecycleBloc>(context).appLifecycleStream,
+        stream: BlocProvider.of<PausedTimeBloc>(context).appLifecycleStream,
         builder: (context, snapshot) {
           pausedTime = snapshot.data;
           return Container(

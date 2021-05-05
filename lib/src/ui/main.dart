@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ft_hangout/main.dart';
-import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
+import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ft_hangout/localization/localizations_delegate.dart';
+import 'package:ft_hangout/src/bloc/sms_bloc.dart';
 import 'package:ft_hangout/src/bloc/theme_bloc.dart';
 import 'package:ft_hangout/src/ui/main_screen.dart';
-import 'package:telephony/telephony.dart';
 
 class Main extends StatefulWidget {
   @override
   _MainState createState() => _MainState();
-}
-
-onBackgroundMessage(SmsMessage message) {
-  debugPrint("onBackgroundMessage called");
 }
 
 class _MainState extends State<Main> with WidgetsBindingObserver {
@@ -26,7 +22,6 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
   bool _isDarkTeme = false;
   String _message = "";
   bool permissionsGranted;
-  final Telephony telephony = Telephony.instance;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -40,43 +35,21 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  onMessage(SmsMessage message) async {
-    print(message.body);
-    setState(() {
-      _message = message.body ?? "Error reading message body.";
-    });
-  }
-
-  onSendStatus(SendStatus status) {
-    setState(() {
-      _message = status == SendStatus.SENT ? "sent" : "delivered";
-    });
-  }
-
   Future<void> initPlatformState() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
 
-    final bool result = await telephony.requestPhoneAndSmsPermissions;
+    final bool result = await BlocProvider.of<SmsBloc>(context).smsPermission();
 
-    if (result != null && result) {
-      telephony.listenIncomingSms(
-          onNewMessage: onMessage, onBackgroundMessage: onBackgroundMessage);
-    }
-
+    print("RESULT: $result");
     if (!mounted) return;
-  }
-
-  void perm() async {
-    permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
-    ;
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    BlocProvider.of<AppLifecycleBloc>(context).handleAppLifecycleState(state);
+    BlocProvider.of<PausedTimeBloc>(context).handleAppLifecycleState(state);
     super.didChangeAppLifecycleState(state);
   }
 

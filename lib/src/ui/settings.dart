@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
-import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
+import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/header_color_bloc.dart';
 import 'package:ft_hangout/src/bloc/language_bloc.dart';
@@ -22,7 +22,7 @@ class _SettingsState extends State<Settings> {
         title: Text(Languages.of(context).settings),
       ),
       body: GestureDetector(
-        onTap: () => BlocProvider.of<AppLifecycleBloc>(context).close(),
+        onTap: () => BlocProvider.of<PausedTimeBloc>(context).close(),
         child: Container(
           constraints: BoxConstraints.expand(),
           child: SingleChildScrollView(

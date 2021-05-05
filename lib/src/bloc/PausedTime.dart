@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:ft_hangout/src/bloc/bloc.dart';
 
-class AppLifecycleBloc implements Bloc {
+class PausedTimeBloc implements Bloc {
   DateTime _savedTime;
   final _appLifecycleController = StreamController<DateTime>.broadcast();
 

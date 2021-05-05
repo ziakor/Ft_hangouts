@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
-import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
+import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/contact_bloc.dart';
 import 'package:ft_hangout/src/models/contact.dart';
@@ -107,7 +107,7 @@ class _NewContactState extends State<NewContact> {
         ),
         body: Container(
           child: GestureDetector(
-            onTap: () => BlocProvider.of<AppLifecycleBloc>(context).close(),
+            onTap: () => BlocProvider.of<PausedTimeBloc>(context).close(),
             child: Container(
               constraints: BoxConstraints.expand(),
               child: Form(

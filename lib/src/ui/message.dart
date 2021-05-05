@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ft_hangout/localization/language/languages.dart';
-import 'package:ft_hangout/src/bloc/app_lifecycle.dart';
+import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/message_bloc.dart';
 import 'package:ft_hangout/src/bloc/theme_bloc.dart';
@@ -45,7 +45,7 @@ class _MessagePageState extends State<MessagePage> {
             }
             messageList = BlocProvider.of<MessageBloc>(context).messageList;
             return GestureDetector(
-              onTap: () => BlocProvider.of<AppLifecycleBloc>(context).close(),
+              onTap: () => BlocProvider.of<PausedTimeBloc>(context).close(),
               child: Column(
                 children: [
                   TimePaused(),
