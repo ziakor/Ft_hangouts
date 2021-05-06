@@ -105,12 +105,26 @@ class DatabaseHelper {
     // deleteDatabase(path);
     try {
       var res = await db
-          .rawQuery("SELECT id, firstName, lastName, phone FROM Contact");
+          .rawQuery("SELECT id, firstName, lastName, phone FROM Contact ");
 
       return res;
     } catch (e) {
       print("error getCOntact : $e");
       return [];
+    }
+  }
+
+  Future<int> getContactIdWithPhoneNumber(String phone) async {
+    Database db = await instance.database;
+
+    try {
+      var res =
+          await db.rawQuery("SELECT id FROM Contact WHERE phone = ?", [phone]);
+      return (res.length == 1 ? res[0]["id"] : null);
+    } catch (e) {
+      print("error getContactIdWithPhoneNumber : $e");
+
+      return null;
     }
   }
 
@@ -150,7 +164,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     try {
       var res = await db.rawQuery(
-          "SELECT id, message, time, idContact, fromMe FROM Message WHERE idcontact = ?",
+          "SELECT id, message, time, idContact, fromMe FROM Message WHERE idcontact = ? ORDER BY id DESC",
           [idContact]);
       return res;
     } catch (e) {

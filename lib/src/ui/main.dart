@@ -25,7 +25,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    initPlatformState();
+    initSmsPlatform();
     super.initState();
   }
 
@@ -35,16 +35,18 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Future<void> initPlatformState() async {
+  Future<void> initSmsPlatform() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-
-    final bool result = await BlocProvider.of<SmsBloc>(context).smsPermission();
-
-    print("RESULT: $result");
+    try {
+      await BlocProvider.of<SmsBloc>(context).initSmsPlatform(context);
+    } catch (e) {
+      print("initSmsPlatform  : $e");
+    }
     if (!mounted) return;
+    return;
   }
 
   @override

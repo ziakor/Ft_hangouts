@@ -63,7 +63,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _deleteContact(int index) async {
-    print("index : ${_listContact[index]["id"]}");
     BlocProvider.of<ContactBloc>(context).removeContact(index);
     _listContact.removeAt(index);
     setState(() {

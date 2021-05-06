@@ -3,6 +3,7 @@ import 'package:ft_hangout/localization/language/languages.dart';
 import 'package:ft_hangout/src/bloc/PausedTime.dart';
 import 'package:ft_hangout/src/bloc/bloc_provider.dart';
 import 'package:ft_hangout/src/bloc/message_bloc.dart';
+import 'package:ft_hangout/src/bloc/sms_bloc.dart';
 import 'package:ft_hangout/src/bloc/theme_bloc.dart';
 import 'package:ft_hangout/src/models/message.dart';
 import 'package:ft_hangout/src/ui/components/time_paused.dart';
@@ -18,6 +19,7 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   List<Map> messageList = [];
+
   _sendMessage(BuildContext context, String message, int timeStamp) {
     BlocProvider.of<MessageBloc>(context).sendMessage(
       Message(
@@ -25,6 +27,8 @@ class _MessagePageState extends State<MessagePage> {
           time: timeStamp,
           idContact: widget.idContact,
           fromMe: 1),
+      context,
+      widget.idContact,
     );
   }
 
@@ -54,14 +58,14 @@ class _MessagePageState extends State<MessagePage> {
                       reverse: true,
                       itemCount: messageList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        // bool position = messageList.length
                         DateTime messageTime =
                             DateTime.fromMillisecondsSinceEpoch(
                                 messageList[index]["time"]);
-                        print(
-                            "time :${messageList[index]["time"]} : $messageTime");
+
                         return Container(
-                          alignment: Alignment.centerLeft, //Position fromMe
+                          alignment: messageList[index]["fromMe"] == 1
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight, //Position fromMe
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -82,8 +86,12 @@ class _MessagePageState extends State<MessagePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(7.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start, // position subtitleFromMe
+                                      crossAxisAlignment: messageList[index]
+                                                  ["fromMe"] ==
+                                              1
+                                          ? CrossAxisAlignment.end
+                                          : CrossAxisAlignment
+                                              .start, // position subtitleFromMe
                                       children: [
                                         Text(
                                           messageList[index]["message"]

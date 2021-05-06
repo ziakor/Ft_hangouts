@@ -53,7 +53,6 @@ class _NewContactState extends State<NewContact> {
     String pattern =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
     RegExp regExp = new RegExp(pattern);
-    print("$value | ${regExp.hasMatch(value)}");
     if (value.length > 0) {
       if (!regExp.hasMatch(value)) return false;
     }
