@@ -64,8 +64,8 @@ class _MessagePageState extends State<MessagePage> {
 
                         return Container(
                           alignment: messageList[index]["fromMe"] == 1
-                              ? Alignment.centerLeft
-                              : Alignment.centerRight, //Position fromMe
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft, //Position fromMe
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [

@@ -10,6 +10,7 @@ import 'package:sqflite/sqflite.dart';
 
 class MessageBloc implements Bloc {
   List<Map<String, dynamic>> _messageList = [];
+  int _currentId;
   final _messageController =
       StreamController<List<Map<String, dynamic>>>.broadcast();
   List<Map<String, dynamic>> get messageList => _messageList;
@@ -39,26 +40,31 @@ class MessageBloc implements Bloc {
       print("$phone | $message | $time");
       int contactId =
           await DatabaseHelper.instance.getContactIdWithPhoneNumber(phone);
+      print(contactId);
       if (contactId != null) {
         final Message newMessage = Message(
             message: message, time: time, idContact: contactId, fromMe: 0);
         int _insertId = await DatabaseHelper.instance.insertMessage(newMessage);
-        _messageList.insert(0, {
-          "id": _insertId,
-          "message": message,
-          "time": time,
-          "fromMe": false,
-        });
+
+        if (contactId == _currentId) {
+          _messageList.insert(0, {
+            "id": _insertId,
+            "message": message,
+            "time": time,
+            "fromMe": false,
+          });
+          messageSink.add(_messageList);
+        }
       }
     } catch (e) {
       return;
     }
-    messageSink.add(_messageList);
   }
 
   void getMessage(int idContact) async {
     _messageList =
         List.from(await DatabaseHelper.instance.getMessages(idContact));
+    _currentId = idContact;
     messageSink.add(_messageList);
   }
 

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ft_hangout" >
+    package="com.example.ft_hangout">
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="ft_hangout" >
-
+        android:icon="@mipmap/logo42"
+        android:label="ft_hangout"
+        android:usesCleartextTraffic="true"
+        >
 
         <activity
             android:name=".MainActivity"
@@ -17,7 +18,7 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
 
             <!--
                  Specifies an Android theme to apply to this Activity as soon as
@@ -45,8 +46,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <action android:name="android.intent.action.SEND" />
-                <action android:name="android.intent.action.SENDTO" />
 
+                <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -59,6 +61,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+
     </application>
 
 </manifest>

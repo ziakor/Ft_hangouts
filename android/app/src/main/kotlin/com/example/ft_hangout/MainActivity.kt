@@ -21,8 +21,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
 
     private val _channelName = "com.ft_hangouts/sms";
-    private val rationaleJustShown = false
-    var messages = listOf<HashMap<String, Any>>()
+    private var setup = false
     private val PERMISSION_ID = 42
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -39,16 +38,18 @@ class MainActivity: FlutterActivity() {
                         override fun onReceive(context: Context?, intent: Intent?) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
                                 for (sms in Telephony.Sms.Intents.getMessagesFromIntent(intent)){
-                                    println(sms.displayOriginatingAddress)
-                                    println(sms.displayMessageBody)
                                     methodChannel.invokeMethod("smsReceived", hashMapOf("from" to sms.displayOriginatingAddress, "message" to sms.displayMessageBody));
                                 }
                             }
                         }
                     }
-                    registerReceiver(br, IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
+                    if (!setup)
+                    {
+                        setup = true
+                        registerReceiver(br, IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
+                    }
                 }
-                result.success(messages)
+                result.success(true);
             }
             if (call.method == "sendSms"){
                 if (handlePermissions()){

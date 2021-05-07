@@ -89,9 +89,11 @@ class DatabaseHelper {
   Future<int> deleteContact(int contactId) async {
     Database db = await instance.database;
 
+    print("DELETE contact");
+
+    await db.rawDelete("DELETE  FROM Message WHERE idContact = ?", [contactId]);
     return db.rawDelete("DELETE FROM Contact WHERE id = ?", [contactId]).then(
         (value) {
-      print(">>$value");
       return value;
     }).catchError((value) {
       print("error  delete contact : $value");
@@ -117,9 +119,18 @@ class DatabaseHelper {
   Future<int> getContactIdWithPhoneNumber(String phone) async {
     Database db = await instance.database;
 
+    if (phone.startsWith("+33")) {
+      String _tmpPhone = phone.replaceAll("+33", "0");
+      var res = await db
+          .rawQuery("SELECT id FROM Contact WHERE phone = ?", [_tmpPhone]);
+      if (res.length > 0) {
+        return res[0]["id"];
+      }
+    }
     try {
       var res =
           await db.rawQuery("SELECT id FROM Contact WHERE phone = ?", [phone]);
+
       return (res.length == 1 ? res[0]["id"] : null);
     } catch (e) {
       print("error getContactIdWithPhoneNumber : $e");
