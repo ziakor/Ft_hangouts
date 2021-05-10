@@ -23,8 +23,6 @@ class ContactDetailBloc implements Bloc {
 
   void updateContact(
       String field, String value, int id, BuildContext context) async {
-    print("$field | $value | $id");
-
     var response =
         await DatabaseHelper.instance.updateContact(field, value, id);
     if (response != null) {

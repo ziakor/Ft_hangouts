@@ -37,10 +37,8 @@ class MessageBloc implements Bloc {
 
   void newMessageReceived(String phone, String message, int time) async {
     try {
-      print("$phone | $message | $time");
       int contactId =
           await DatabaseHelper.instance.getContactIdWithPhoneNumber(phone);
-      print(contactId);
       if (contactId != null) {
         final Message newMessage = Message(
             message: message, time: time, idContact: contactId, fromMe: 0);

@@ -56,10 +56,6 @@ class MainActivity: FlutterActivity() {
 
                     val smsManager = SmsManager.getDefault() as SmsManager;
                     smsManager.sendTextMessage(call.argument<String>("phone"), null, call.argument<String>("message"), null, null)
-//                val sendIntent = Intent(Intent.ACTION_VIEW)
-//                sendIntent.putExtra("sms_body", "default content")
-//                sendIntent.type = "vnd.android-dir/mms-sms"
-//                startActivity(sendIntent)
                 }
             }
 
@@ -78,20 +74,6 @@ class MainActivity: FlutterActivity() {
                 return true
         }
         return false
-    }
-
-    private fun receiveMessage (){
-        var br = object :BroadcastReceiver(){
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-                    for (sms in Telephony.Sms.Intents.getMessagesFromIntent(intent)){
-                        println(sms.displayOriginatingAddress)
-                        println(sms.displayMessageBody)
-                    }
-                }
-            }
-        }
-        registerReceiver(br, IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
     }
 }
 

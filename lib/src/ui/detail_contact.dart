@@ -111,7 +111,6 @@ class _DetailContactEditableState extends State<DetailContactEditable> {
     String pattern =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
     RegExp regExp = new RegExp(pattern);
-    print("$value | ${regExp.hasMatch(value)}");
     if (value.length > 0) {
       if (!regExp.hasMatch(value)) return false;
     }
@@ -134,7 +133,6 @@ class _DetailContactEditableState extends State<DetailContactEditable> {
 
   _updateSelectDate(String date) {
     var _split = date.split("/");
-    print(_split);
     if (_split.length == 3) {
       _selectedDate = DateTime(
           int.parse(_split[2]), int.parse(_split[1]), int.parse(_split[0]));
@@ -159,7 +157,6 @@ class _DetailContactEditableState extends State<DetailContactEditable> {
           _birthdayFieldController.text = _contactData["birthday"];
           _updateSelectDate(_contactData["birthday"]);
         }
-        print("DATA: $_contactData");
         return Container(
           child: Scaffold(
             appBar: AppBar(

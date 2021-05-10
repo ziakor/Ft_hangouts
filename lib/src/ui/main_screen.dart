@@ -79,7 +79,6 @@ class _MainScreenState extends State<MainScreen> {
           if (snapshot.data == null) {
             BlocProvider.of<ContactBloc>(context).getContactList();
           } else {
-            print(snapshot.data);
             _listContact = snapshot.data;
           }
           return GestureDetector(

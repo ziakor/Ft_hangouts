@@ -32,27 +32,21 @@ class SmsBloc implements Bloc {
         }
         return;
       });
-    } on PlatformException catch (e) {
-      print("smspermission: $e");
-    }
+    } on PlatformException catch (e) {}
   }
 
   void sendSms(String phone, String message) async {
     try {
       await _channel
           .invokeMethod("sendSms", {"phone": phone, "message": message});
-    } on PlatformException catch (e) {
-      print("smspermission: $e");
-    }
+    } on PlatformException catch (e) {}
   }
 
   Future<bool> smsPermission() async {
     try {
       final bool result = await _channel.invokeMethod("requestSmsPermission");
       return result;
-    } on PlatformException catch (e) {
-      print("smspermission: $e");
-    }
+    } on PlatformException catch (e) {}
     return false;
   }
 

@@ -36,7 +36,6 @@ class DatabaseHelper {
       `birthday` TEXT,
       `notes` TEXT
       );''');
-    print("Table Contact is created!");
     await db.execute(''' CREATE TABLE `Message` (
         `id` INTEGER PRIMARY KEY,
         `message` INT NOT NULL,
@@ -44,7 +43,6 @@ class DatabaseHelper {
         `fromMe` INT NOT NULL,
         `idContact` INT NOT NULL
       );''');
-    print("Table Message is created");
   }
 
 //! CONTACT
@@ -65,7 +63,6 @@ class DatabaseHelper {
     ).then((value) {
       return value;
     }).catchError((value) {
-      print("error insert : $value");
       return -1;
     });
   }
@@ -81,7 +78,6 @@ class DatabaseHelper {
     ).then((value) {
       return value;
     }).catchError((value) {
-      print("error update : $value");
       return -1;
     });
   }
@@ -89,14 +85,11 @@ class DatabaseHelper {
   Future<int> deleteContact(int contactId) async {
     Database db = await instance.database;
 
-    print("DELETE contact");
-
     await db.rawDelete("DELETE  FROM Message WHERE idContact = ?", [contactId]);
     return db.rawDelete("DELETE FROM Contact WHERE id = ?", [contactId]).then(
         (value) {
       return value;
     }).catchError((value) {
-      print("error  delete contact : $value");
       return -1;
     });
   }
@@ -111,7 +104,6 @@ class DatabaseHelper {
 
       return res;
     } catch (e) {
-      print("error getCOntact : $e");
       return [];
     }
   }
@@ -133,8 +125,6 @@ class DatabaseHelper {
 
       return (res.length == 1 ? res[0]["id"] : null);
     } catch (e) {
-      print("error getContactIdWithPhoneNumber : $e");
-
       return null;
     }
   }
@@ -145,13 +135,11 @@ class DatabaseHelper {
     try {
       var res =
           await db.rawQuery("SELECT * FROM Contact WHERE id = ?", [idContact]);
-      print("res : $res");
       if (res.length > 0) {
         return (res[0]);
       } else
         return null;
     } catch (e) {
-      print("error getContactDetail : $e");
       return null;
     }
   }
@@ -166,7 +154,6 @@ class DatabaseHelper {
     ).then((value) {
       return value;
     }).catchError((value) {
-      print("error insert : $value");
       return -1;
     });
   }
@@ -179,7 +166,6 @@ class DatabaseHelper {
           [idContact]);
       return res;
     } catch (e) {
-      print("error getMessages: $e");
       return [];
     }
   }

@@ -42,9 +42,7 @@ class _MainState extends State<Main> with WidgetsBindingObserver {
     // setState to update our non-existent appearance.
     try {
       await BlocProvider.of<SmsBloc>(context).initSmsPlatform(context);
-    } catch (e) {
-      print("initSmsPlatform  : $e");
-    }
+    } catch (e) {}
     if (!mounted) return;
     return;
   }
